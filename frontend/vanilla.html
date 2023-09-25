@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+/>
+    <title>Recipe Page</title>
+    <style>
+        /* Add your CSS for like and save buttons here */
+        .like-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .like-button:hover {
+            transform: scale(1.1);
+        }
+
+        .save-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .save-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Define the default and liked icons */
+        .like-icon {
+            display: inline;
+        }
+
+        .liked-icon {
+            display: none;
+        }
+
+        /* Style the comment button */
+        .comment-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .comment-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Add your comment section styles here */
+        .comment-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .comment-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .comment-input textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .comment-input button {
+            margin-top: 10px;
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/img/logo.jpg" alt="" class="nav__logo-img" />
+            </a>
+            <div class="nav__menu" id="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link active link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="recipe.html" class="nav__link">Recipe</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="conversion.html" class="nav__link">Conversion</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="upload.html" class="nav__link">Upload</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="about.html" class="nav__link">About us</a>
+                    </li>
+                </ul>
+
+                
+            </div>
+
+            <div class="header__user-actions">
+                <a href="wishlist.html" class="header__action-btn">
+                    <img src="assets/img/heart.png" alt="">
+                    <span class="count">3</span>
+                </a>
+                <a href="cart.html" class="header__action-btn">
+                    <img src="assets/img/cart.png" alt="">
+                    <span class="count">3</span>
+                </a>
+                <div class="header__auth-buttons">
+                    <a href="login.html" class="header__login-btn">Login</a>
+                    <a href="register.html" class="header__register-btn">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="main">
+        <div class="background__container">
+            <div class="logo-text">
+                <section class="eggless">
+                    <h3>VANILLA CAKE- EGGLESS</h3>
+                    <h5> INGREDIENTS</h5>
+                    <p>2 + ¼ (270g) all-purpose flour</p>
+                    <p>1 ½ teaspoon (6g) baking powder</p>
+                        <p>1 ½ cup (428g) yogurt</p>
+                            <p>1/2 teaspoon (3g) baking soda</p>
+                                <p>1 + ¼ cup (280g) caster sugar</p>
+                                    <p>¾ cup (180ml) vegetable oil</p>
+                                        <p>1 ½ teaspoon (7ml) vanilla extract</p>
+                                           
+                        <h5>METHOD</h5>
+                        <p>1. Preheat the oven.</p>
+                        <p>2. In a mixing bowl, combine vegetable oil, yogurt, and sugar. Beat the mixture thoroughly until it's well incorporated. Add vanilla extract to enhance the flavor.</p>
+                        <p>3. In a separate bowl, sift together the dry ingredients: flour, baking powder, and baking soda.</p>
+                        <p>4. Gradually incorporate the dry sifted ingredients into the wet mixture. Alternatively, you can add the dry ingredients and milk in stages to ensure a smooth batter. </p>
+                            <p>5. Once the batter is smooth and well-mixed, introduce the vinegar (OPTIONAL:- put coffee powder in hot water(3ml) and add it to the batter). This will activate the leavening agents and contribute to the cake's texture.
+                                </p>
+                                <p>6. Prepare the baking pan by greasing it with oil and either dusting it with flour or lining it with parchment paper to prevent sticking.
+                                    </p>
+                                    <p>7. Preheat the oven to 180 degrees Celsius (356 degrees Fahrenheit).
+                                        </p>
+                                        <p>8. Pour the batter into the prepared baking pan.
+                                            </p>
+                                            <p>9. Place the pan in the preheated oven and bake for approximately 20 minutes. Alternatively, you can use the skewer test: insert a skewer into the center of the cake; if it comes out clean, the cake is ready.
+                                                </p>
+                                                <p>10.Once baked to perfection, remove the cake from the oven and let it cool before serving.</p>
+                </section>
+                <section class="egg">
+                    <h3>VANILLA CAKE - EGG</h3>
+                    <h5>INGREDIENTS</h5>
+                    <p>
+                        1 1/2 cups plain flour (maida)</p>
+                        <p>1 1/2 tsp baking powder</p>
+                        <p>1 cup powdered sugar</p>
+                        <p>3/4 cup butter</p>
+                        <p>1 cup powdered sugar</p>
+                        <p>3 eggs</p>
+                        <p>6 tbsp milk</p>
+                        <p>1 tsp vanilla essence</p>
+                        <h5>METHOD</h5>
+                        <p>1. To make rich vanilla sponge cake, sieve the plain flour and baking powder in a deep bowl and keep aside.</p>
+                        <p>2. Cream the butter in a bowl with an electric beater for 1 minute.</p>
+                        <p>3. Add the sugar and cream it with an electric beater for 2 to 3 minutes till it is light and fluffy.</p>
+                        <p>4. Add one egg, 1 tbsp of the sifted flour mixture and beat with an electric beater till the egg is just mixed. Make sure to not over beat the egg.</p>
+                        <p>5. Repeat step 4 two more times.</p>
+                        <p>Add the remaining flour, vanilla essence and milk and fold gently using a spatula till well mixed.</p>
+                            <p>Beat with an electric beater for 30 seconds to mix uniformly.</p>
+                            <p>Line and grease a 175 mm. (7") diameter cake tin and pour the batter into it.</p>
+                            <p>Bake in a pre-heated oven at 180ºc (360ºf) for 50 minutes.</p>
+                            <p>Keep the rich vanilla sponge cake aside to cool slightly, demould and use as required.</p>
+                </section>
+            </div>
+        </div>
+        <div class="recipe-action">
+            <button class="like-button">Like</button>
+        <button class="save-button">Save</button>
+<button class="comment-button">Comment</button>
+        </div>
+        </div>
+    </main>
+</body>
+</html>
+
+

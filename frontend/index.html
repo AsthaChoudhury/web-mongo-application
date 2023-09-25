@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="/assets/css/style.css"/>
+    <title>Home</title>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/img/logo.jpg" alt="" class="nav__logo-img" />
+            </a>
+            <div class="nav__menu" id="nav__menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link active link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="recipe.html" class="nav__link">Recipe</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="conversion.html" class="nav__link">Conversion</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="upload.html" class="nav__link">Upload</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="about.html" class="nav__link">About us</a>
+                    </li>
+                </ul>
+
+                
+            </div>
+
+            <div class="header__user-actions">
+                <a href="wishlist.html" class="header__action-btn">
+                    <img src="assets/img/heart.png" alt="">
+                    <span class="count">3</span>
+                </a>
+                <a href="cart.html" class="header__action-btn">
+                    <img src="assets/img/cart.png" alt="">
+                    <span class="count">3</span>
+                </a>
+                <div class="header__auth-buttons">
+                    <a href="login.html" class="header__login-btn">Login</a>
+                    <a href="register.html" class="header__register-btn">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+
+        <section class="home">
+            <div class="home__container container grid">
+                <div class="row">
+                    <div class="image-container">
+                        <img src="assets/img/1.jpg">
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/img/3.jpg">
+                        <div class="image-text">
+                            <h3>Happiness is HANDMADE</h3>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets/img/2.jpg">
+                    </div>
+                </div>
+            </div>
+<section class="trending">
+    <div class="trending__container container grid">
+      <h2 class="section__title">Trending Now</h2>
+      <div class="trending__items" id="trendingItems">
+      </div>
+    </div>
+  </section>
+  
+        </section>
+    </main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const response = await fetch("/api/user/login"); 
+      const data = await response.json();
+
+      const trendingItemsContainer = document.getElementById("trendingItems");
+      data.trendingBlogs.forEach((blog) => {
+        const item = document.createElement("div");
+        item.classList.add("trending__item");
+        item.innerHTML = `
+          <img src="${blog.image}" alt="Trending Blog Image">
+          <h3 class="trending__item-title">${blog.title}</h3>
+          <p class="trending__item-likes">${blog.likes} Likes</p>
+        `;
+        trendingItemsContainer.appendChild(item);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+</script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
