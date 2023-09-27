@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const loginButton = document.querySelector('.header__login-btn');
-  const registerButton = document.querySelector('.header__register-btn');
+  const loginButton = document.querySelector('.auth-form button');
+  const registerButton = document.querySelector('.register-form button');
   const commentToggle = document.querySelector(".comment-toggle");
   const commentSection = document.querySelector(".comment-section");
   const recipeForm = document.getElementById('recipeForm');
@@ -34,22 +34,24 @@ async function handleRecipeFormSubmission(event){
     }
   });
 
-  loginButton.addEventListener('click', () => {
-    fetch('login.html')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch login page');
-        }
-        return response.text();
-      })
-      .then(data => {
-        const mainContainer = document.querySelector('.main');
-        mainContainer.innerHTML = data;
-      })
-      .catch(error => {
-        console.error('Error fetching login page:', error);
-      });
-  });
+  if(loginButton){
+    loginButton.addEventListener('click', () => {
+      fetch('login.html')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch login page');
+          }
+          return response.text();
+        })
+        .then(data => {
+          const mainContainer = document.querySelector('.main');
+          mainContainer.innerHTML = data;
+        })
+        .catch(error => {
+          console.error('Error fetching login page:', error);
+        });
+    });
+  }
 
   
   const currentPage = window.location.pathname;
@@ -60,7 +62,9 @@ async function handleRecipeFormSubmission(event){
     displaySavedRecipes();
   }
 
+ if(registerButton){
   registerButton.addEventListener('click', () => {
+    console.log('Register button clicked'); 
     fetch('register.html')
       .then(response => {
         if (!response.ok) {
@@ -77,6 +81,7 @@ async function handleRecipeFormSubmission(event){
       });
   });
 
+ }
   document.addEventListener('submit', async (event) => {
     event.preventDefault();
   
@@ -187,9 +192,11 @@ async function handleRecipeFormSubmission(event){
   });
 
 
-  commentToggle.addEventListener("click", () => {
-    commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
-  });
+  if (commentToggle && commentSection) {
+    commentToggle.addEventListener("click", () => {
+      commentSection.style.display = commentSection.style.display === "none" ? "block" : "none";
+    });
+  }
     async function displayLikedRecipes() {
       try {
         const response = await fetch('../api/user/liked-recipes'); 

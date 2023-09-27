@@ -7,6 +7,6 @@ const router= express.Router();
 router.get('/:userId/liked-recipes', getLikedRecipes);
 router.get('/:userId/saved-recipes', getSavedRecipes);
 router.get("/",getAllUsers)
-router.post("/user/signup",signup);
-router.post("/user/login",login);
+router.post("/signup",signup);
+router.post("/login",login);
 export default router;

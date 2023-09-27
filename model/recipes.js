@@ -3,7 +3,7 @@ const router = express.Router();
 import multer from 'multer';
 const upload = multer({dest:'uploads/'});
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/upload', upload.single('image'), async (req, res) => {
     try {
       const { title, description, ingredients, instructions, category } = req.body;
       const imagePath = req.file.path; 

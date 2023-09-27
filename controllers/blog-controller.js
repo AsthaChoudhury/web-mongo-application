@@ -46,6 +46,7 @@ export const addRecipe = async(req,res,next)=>{
         session.endSession();
         return res.status(500).json({ message: "Error adding recipe" });
       }
+      
 };
 
 export const updateRecipe = async (req, res, next) => {

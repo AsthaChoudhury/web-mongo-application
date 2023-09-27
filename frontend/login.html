@@ -55,7 +55,7 @@
     <main class="main">
         <div class="auth-container">
             <h2 class="heading">Login</h2>
-            <form class="auth-form" action="/api/user/login" method="POST">
+            <form class="auth-form" action="/api/user/login" method="post" enctype="multipart/form-data">
                 <div class="input-group">
                     <label for="email">E-mail:</label>
                 <input type="email" id="email" name="email" required>
