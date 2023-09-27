@@ -1,20 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './routes/user-routes.js';
 import cors from 'cors';
 import path from 'path';
 import multer from 'multer';
-import recipesRouter from './routes/recipe-routes.js';
 import {fileURLToPath} from 'url';
-import {
-  getAllRecipes,
-  addRecipe,
-  updateRecipe,
-  getById,
-  deleteRecipe,
-  getTrendingRecipes,
-  getByUserId,
-} from './controllers/blog-controller.js'; 
+import bodyParser from 'body-parser';
+import userRouter from './routes/user-routes.js';
+import recipesRouter from './routes/recipe-routes.js';
+
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -24,7 +17,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/user", router);
+app.use("/api/user", userRouter);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 const frontendPath = path.join(__dirname, 'frontend');
 
@@ -54,5 +49,3 @@ app.listen(8080, () => {
   console.log("Server is running on port 8080");
 });
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
