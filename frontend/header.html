@@ -34,30 +34,25 @@
         </a>
 
             <div class="header__auth-buttons" id="auth-buttons">
-                <!-- Login/Logout buttons will be dynamically injected here -->
             </div>
         </div>
     </nav>
 </header>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-      // Check user authentication status
       fetch('/api/user/status', {
           method: 'GET',
-          credentials: 'include' // Ensure credentials are sent with the request
+          credentials: 'include'
       })
       .then(response => response.json())
       .then(data => {
           const authButtons = document.querySelector('#auth-buttons');
 
           if (data.loggedIn) {
-              // Inject logout button and profile link
               authButtons.innerHTML = `
                   <a href="/profile" class="header__action-btn">Profile</a>
                   <a href="/api/user/logout" id="logout" class="header__login-btn">Logout</a>
               `;
-
-              // Add event listener to logout link
               document.querySelector('#logout')?.addEventListener('click', (event) => {
                   event.preventDefault();
                   fetch('/api/user/logout', {
@@ -67,13 +62,11 @@
                   .then(response => response.json())
                   .then(data => {
                       if (data.message === 'Logged out successfully') {
-                          window.location.href = '/login'; // Redirect to login page
+                          window.location.href = '/login';
                       }
                   })
                   .catch(error => console.error('Error logging out:', error));
               });
-
-              // Fetch liked and saved recipe counts
               fetch('/api/user/recipe-counts', {
                   method: 'GET',
                   credentials: 'include'
@@ -85,7 +78,6 @@
               })
               .catch(error => console.error('Error fetching recipe counts:', error));
           } else {
-              // Inject login and register buttons
               authButtons.innerHTML = `
                   <a href="/login" class="header__login-btn">Login</a>
                   <a href="/register" class="header__register-btn">Register</a>
