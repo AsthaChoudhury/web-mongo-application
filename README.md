@@ -52,9 +52,9 @@ A web application to upload and manage recipes, featuring image uploads and text
 3. Use the application to upload and manage recipes.
 
 ## API Endpoints
-POST **/api/user/register** - Register a new user
-POST **/api/user/login** - Log in a user
-POST **/api/upload-recipe** - Upload a new recipe (requires authentication)
+- POST **/api/user/register** - Register a new user
+- POST **/api/user/login** - Log in a user
+- POST **/api/upload-recipe** - Upload a new recipe (requires authentication)
 
 ## Sample Request for Recipe Upload
 
