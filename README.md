@@ -57,17 +57,17 @@ A web application to upload and manage recipes, featuring image uploads and text
 - POST **/api/upload-recipe** - Upload a new recipe (requires authentication)
 
 ## Sample Request for Recipe Upload
-
-{
-  "title": "Chocolate Cake",
-  "description": "A delicious chocolate cake recipe.",
-  "prepTime": "30 minutes",
-  "cookTime": "1 hour",
-  "servings": "8",
-  "ingredients": "<p>Flour, Sugar, Cocoa powder, etc.</p>",
-  "instructions": "<p>Mix all ingredients...</p>",
-  "category": "cakes"
-}
+      ```bash
+      {
+        "title": "Chocolate Cake",
+        "description": "A delicious chocolate cake recipe.",
+        "prepTime": "30 minutes",
+        "cookTime": "1 hour",
+        "servings": "8",
+        "ingredients": "<p>Flour, Sugar, Cocoa powder, etc.</p>",
+        "instructions": "<p>Mix all ingredients...</p>",
+        "category": "cakes"
+      }
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
