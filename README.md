@@ -57,7 +57,7 @@ A web application to upload and manage recipes, featuring image uploads and text
 - POST **/api/upload-recipe** - Upload a new recipe (requires authentication)
 
 ## Sample Request for Recipe Upload
-      ```bash
+      
       {
         "title": "Chocolate Cake",
         "description": "A delicious chocolate cake recipe.",
