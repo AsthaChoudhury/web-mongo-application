@@ -3,78 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="assets/css/style.css"/>
+    <link rel="stylesheet" href="assets/css/style.css"/>
     <title>Register</title>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav container">
-            <a href="index.html" class="nav__logo">
-                <img src="assets/img/logo.jpg" alt="" class="nav__logo-img" />
-            </a>
-            <div class="nav__menu" id="nav__menu">
-                <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="index.html" class="nav__link active link">Home</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="recipe.html" class="nav__link">Recipe</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="conversion.html" class="nav__link">Conversion</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="upload.html" class="nav__link">Upload</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="about.html" class="nav__link">About us</a>
-                    </li>
-                </ul>
-
-                
-            </div>
-
-            <div class="header__user-actions">
-                <a href="wishlist.html" class="header__action-btn">
-                    <img src="assets/img/heart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <a href="cart.html" class="header__action-btn">
-                    <img src="assets/img/cart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <div class="header__auth-buttons">
-                    <a href="login.html" class="header__login-btn">Login</a>
-                    <a href="register.html" class="header__register-btn">Register</a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <header id="header-container"></header>
 
     <main class="main">
         <div class="register-container">
             <h2 class="heading">Register</h2>
-            <form class="register-form" action="/api/user/signup" method="post" enctype="multipart/form-data">
+            <form class="register-form" id="registerForm">
                 <div class="input-group">
-                    <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
                 <div class="input-group">
-                    <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
                 </div>
-                
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? <a href="login.html">Login here</a></p>
         </div>
     </main>
-    <script src="assets/js/main.js"></script>
 
-  </body>
-  </html>
-  
+    <script type="module">
+        import { loadHeader } from './assets/js/loadHeader.js';
+        
+        // Load the header dynamically
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeader();
+        });
+
+        // Registration form submission logic
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Simple client-side password confirmation check
+            const confirmPassword = document.getElementById('confirm-password').value;
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/user/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Registration successful');
+                    window.location.href = '/'; // Redirect to homepage
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

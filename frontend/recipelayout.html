@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <title>Recipe Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            background-color: white;
+        }
+
+        .logo-text {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        ul, ol {
+            margin: 0;
+            padding: 0;
+        }
+        h3, h5, p {
+            margin: 0 0 10px 0; 
+            padding: 0;
+        }
+        ul li, ol li {
+            font-size: 0.8rem; 
+            margin: 5px 0;
+        }
+
+        li {
+            font-size: 0.8rem; 
+        }
+
+        .eggless {
+            color: #333;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: hsl(154,13%,32%);
+        }
+
+        h5 {
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .recipe-info {
+            display: flex;
+            gap: 10px; 
+            margin-bottom: 8px; 
+        }
+        
+        .recipe-info p {
+            background-color: hsl(176,88%, 27%);
+            font-size: 0.8rem;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .recipe-action {
+            margin-top: 1px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .like-button, .save-button, .comment-button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: white;
+            background-color: #007BFF;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .like-button:hover, .save-button:hover, .comment-button:hover {
+            background-color: #0056b3;
+        }
+
+        .like-button:active, .save-button:active, .comment-button:active {
+            transform: scale(0.98);
+        }
+
+        .like-button {
+            background-color: #28a745;
+        }
+
+        .save-button {
+            background-color: #ffc107;
+        }
+
+        .comment-button {
+            background-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .recipe-action {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header-container"></header>
+
+    <main>
+        <div class="logo-text">
+            <section class="eggless">
+                <h3 id="recipe-title">Loading...</h3>
+                <div class="recipe-info">
+                    <p id="prep-time">Prep Time: </p>
+                    <p id="cook-time">Cook Time: </p>
+                    <p id="servings">Servings: </p>
+                </div>
+                <h5>Ingredients</h5>
+                <ul id="ingredients-list">
+                </ul>
+                <h5>Method</h5>
+                <ol id="method-list">
+                </ol>
+            </section>
+            <div class="recipe-action">
+                <button class="like-button">Like</button>
+                <button class="save-button">Save</button>
+                <button class="comment-button">Comment</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { loadHeader } from './assets/js/loadHeader.js';
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeader();
+            loadRecipe();
+        });
+
+        async function loadRecipe() {
+            const params = new URLSearchParams(window.location.search);
+            const recipeId = params.get("id");
+        
+            if (!recipeId) {
+                console.error('Recipe ID not found in URL');
+                displayErrorMessage("Recipe Not Found");
+                return;
+            }
+        
+            try {
+                const response = await fetch(`http://localhost:3000/api/recipes/${recipeId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const recipeData = await response.json();
+                displayRecipe(recipeData);
+            } catch (error) {
+                console.error('Error fetching recipe data:', error);
+                displayErrorMessage("Error fetching recipe");
+            }
+        }
+
+        function displayRecipe(recipe) {
+            document.getElementById('recipe-title').textContent = recipe.title || "No title available";
+            document.getElementById('prep-time').textContent = `Prep Time: ${recipe.prepTime || "N/A"}`;
+            document.getElementById('cook-time').textContent = `Cook Time: ${recipe.cookTime || "N/A"}`;
+            document.getElementById('servings').textContent = `Servings: ${recipe.servings || "N/A"}`;
+    
+            const ingredientsArray = recipe.ingredients ? recipe.ingredients.split(',') : [];
+            const methodArray = recipe.instructions ? recipe.instructions.split('.') : []; 
+        
+            const ingredientsList = document.getElementById('ingredients-list');
+            ingredientsList.innerHTML = ingredientsArray.map(ingredient => `<li>${ingredient.trim()}</li>`).join('');
+        
+            const methodList = document.getElementById('method-list');
+            methodList.innerHTML = methodArray.map(step => `<li>${step.trim()}</li>`).filter(step => step).join('');
+        }
+        
+
+        function displayErrorMessage(message) {
+            const errorElement = document.getElementById("recipe-title");
+            if (errorElement) {
+                errorElement.textContent = message;
+            } else {
+                console.error('Error element not found in DOM');
+            }
+        }
+    </script>
+</body>
+</html>

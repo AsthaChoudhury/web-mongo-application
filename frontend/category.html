@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <title>Recipes</title>
+</head>
+<body>
+    <header id="header-container"></header>
+
+    <main class="main">
+        <section class="recipe" id="recipe-section">
+            <!-- Recipes will be dynamically injected here -->
+        </section>
+        <div id="error-message" class="error-message"></div> <!-- Error message container -->
+    </main>
+
+    <script type="module">
+        import { loadHeader } from './assets/js/loadHeader.js';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeader();
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get('category');
+            
+            if (category) {
+                loadRecipes(category); // Load recipes only if the category is provided
+            } else {
+                displayErrorMessage('No category selected!'); // Show error if category is missing
+            }
+        });
+
+        async function loadRecipes(category) {
+            try {
+                const response = await fetch(`/api/recipes?category=${category}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+          
+                const recipes = await response.json();
+                const recipeSection = document.getElementById('recipe-section');
+                recipeSection.innerHTML = ''; // Clear existing recipes
+          
+                if (recipes.length === 0) {
+                    displayErrorMessage('No recipes found for this category.');
+                    return;
+                }
+
+                recipes.forEach(recipe => {
+                    const recipeCard = document.createElement('a');
+                    recipeCard.href = `recipelayout.html?id=${recipe._id}`; // Link to individual recipe page with ID
+                    recipeCard.className = "cake_circle swiper__slide"; // Use appropriate class names
+          
+                    recipeCard.innerHTML = `
+                        <img src="${recipe.image || 'assets/img/default.jpg'}" alt="${recipe.title}" class="cake__icon">
+                        <h3 class="cake__title">${recipe.title.toUpperCase()}</h3>
+                    `;
+                    recipeSection.appendChild(recipeCard);
+                });
+          
+            } catch (error) {
+                console.error("Error loading recipes:", error);
+                displayErrorMessage('There was an error loading the recipes. Please try again later.');
+            }
+        }
+
+        function displayErrorMessage(message) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block'; // Display error message
+        }
+    </script>
+</body>
+</html>
