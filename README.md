@@ -70,4 +70,4 @@ A web application to upload and manage recipes, featuring image uploads and text
       }
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License.
