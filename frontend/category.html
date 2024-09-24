@@ -11,7 +11,7 @@
         <section class="recipe" id="recipe-section">
             <!-- Recipes will be dynamically injected here -->
         </section>
-        <div id="error-message" class="error-message"></div> <!-- Error message container -->
+        <div id="error-message" class="error-message"></div> 
     </main>
 
     <script type="module">
@@ -23,9 +23,9 @@
             const category = params.get('category');
             
             if (category) {
-                loadRecipes(category); // Load recipes only if the category is provided
+                loadRecipes(category); 
             } else {
-                displayErrorMessage('No category selected!'); // Show error if category is missing
+                displayErrorMessage('No category selected!'); 
             }
         });
 
@@ -38,7 +38,7 @@
           
                 const recipes = await response.json();
                 const recipeSection = document.getElementById('recipe-section');
-                recipeSection.innerHTML = ''; // Clear existing recipes
+                recipeSection.innerHTML = ''; 
           
                 if (recipes.length === 0) {
                     displayErrorMessage('No recipes found for this category.');
@@ -47,8 +47,8 @@
 
                 recipes.forEach(recipe => {
                     const recipeCard = document.createElement('a');
-                    recipeCard.href = `recipelayout.html?id=${recipe._id}`; // Link to individual recipe page with ID
-                    recipeCard.className = "cake_circle swiper__slide"; // Use appropriate class names
+                    recipeCard.href = `recipelayout.html?id=${recipe._id}`;
+                    recipeCard.className = "cake_circle swiper__slide"; 
           
                     recipeCard.innerHTML = `
                         <img src="${recipe.image || 'assets/img/default.jpg'}" alt="${recipe.title}" class="cake__icon">
