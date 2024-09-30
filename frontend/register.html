@@ -38,12 +38,9 @@
     <script type="module">
         import { loadHeader } from './assets/js/loadHeader.js';
         
-        // Load the header dynamically
         document.addEventListener("DOMContentLoaded", () => {
             loadHeader();
         });
-
-        // Registration form submission logic
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -51,7 +48,6 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Simple client-side password confirmation check
             const confirmPassword = document.getElementById('confirm-password').value;
             if (password !== confirmPassword) {
                 alert('Passwords do not match');
@@ -69,7 +65,7 @@
 
                 if (response.ok) {
                     alert('Registration successful');
-                    window.location.href = '/'; // Redirect to homepage
+                    window.location.href = '/'; 
                 } else {
                     alert(`Error: ${data.message}`);
                 }

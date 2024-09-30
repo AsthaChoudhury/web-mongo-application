@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginFOrm");
     const registerForm = document.getElementById("registerForm");
 
-    // Handle login form submission with AJAX
     if (loginForm) {
       loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -27,7 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
           }),
         });
         const data = await response.json();
+        console.log("Response Data:", data);
+
         if (response.ok) {
+          sessionStorage.setItem("userId", data.user._id);
+          console.log("User ID set in sessionStorage:", data.user._id);
           window.location.href = "/";
         } else {
           alert("Login failed" + data.message);
@@ -49,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Passwords do not match");
           return;
         }
+        // sessionStorage.setItem("userId", user.id);
 
         try {
           const response = await fetch(
@@ -79,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let recipeCount = 0;
 
-  // Handle recipe form submission
   async function handleRecipeFormSubmission(event) {
     event.preventDefault();
     const formData = new FormData(recipeForm);
@@ -102,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     recipeForm.addEventListener("submit", handleRecipeFormSubmission);
   }
 
-  // Handle login button click
   if (loginButton) {
     loginButton.addEventListener("click", () => {
       fetch("login.html") // Fetch login page
@@ -122,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Handle register button click
   if (registerButton) {
     registerButton.addEventListener("click", () => {
       fetch("register.html") // Fetch register page
@@ -142,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Handle form submissions
   document.querySelectorAll(".signup-form, .auth-form").forEach((form) => {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -159,7 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (response.ok) {
-          window.location.href = "/"; // Redirect to /
+          sessionStorage.setItem("userId", data.user._id);
+          console.log("User ID set in sessionStorage:", data.user._id);
+          window.location.href = "/";
         } else {
           console.error("Request failed:", response.statusText);
         }
@@ -169,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle like button clicks
   const likeButtons = document.querySelectorAll(".like-button");
   likeButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
@@ -190,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle save button clicks
   const saveButtons = document.querySelectorAll(".save-button");
   saveButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
@@ -208,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle comment form submissions
   const commentForms = document.querySelectorAll(".comment-form");
   commentForms.forEach((form) => {
     form.addEventListener("submit", async (event) => {
@@ -236,15 +235,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle comment toggle
+  const logoutButton = document.querySelector("#logout");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      try {
+        const response = await fetch("http://localhost:3000/api/user/logout", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          window.location.href = "/login";
+        } else {
+          console.error("Logout failed:", data.message);
+          alert(`Logout failed: ${data.message}`);
+        }
+      } catch (error) {
+        console.error("Error during logout:", error);
+      }
+    });
+  }
+
   if (commentToggle && commentSection) {
     commentToggle.addEventListener("click", () => {
       commentSection.style.display =
         commentSection.style.display === "none" ? "block" : "none";
     });
   }
-
-  // Display recipes based on the current page
   const currentPage = window.location.pathname;
   if (currentPage === "/wishlist.html") {
     displayLikedRecipes();
@@ -254,14 +274,13 @@ document.addEventListener("DOMContentLoaded", () => {
     displayUploadedRecipes();
   }
 
-  // Display liked recipes
   async function displayLikedRecipes() {
     try {
       const response = await fetch("/api/user/liked-recipes");
       if (response.ok) {
         const likedRecipes = await response.json();
         const recipeGrid = document.querySelector(".recipe-grid");
-        recipeGrid.innerHTML = ""; // Clear previous recipes
+        recipeGrid.innerHTML = "";
 
         likedRecipes.forEach((recipe) => {
           const recipeCard = document.createElement("div");
@@ -288,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         const savedRecipes = await response.json();
         const recipeGrid = document.querySelector(".recipe-grid");
-        recipeGrid.innerHTML = ""; // Clear previous recipes
+        recipeGrid.innerHTML = "";
 
         savedRecipes.forEach((recipe) => {
           const recipeCard = document.createElement("div");
@@ -309,7 +328,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Display uploaded recipes
   async function displayUploadedRecipes() {
     try {
       const response = await fetch("/api/recipe/uploaded");

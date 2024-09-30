@@ -156,7 +156,11 @@
         import { loadHeader } from './assets/js/loadHeader.js';
         document.addEventListener("DOMContentLoaded", () => {
             loadHeader();
+            
             loadRecipe();
+
+            document.querySelector('.like-button').addEventListener('click', handleLike);
+        document.querySelector('.save-button').addEventListener('click', handleSave);
         });
 
         async function loadRecipe() {
@@ -187,15 +191,64 @@
             document.getElementById('prep-time').textContent = `Prep Time: ${recipe.prepTime || "N/A"}`;
             document.getElementById('cook-time').textContent = `Cook Time: ${recipe.cookTime || "N/A"}`;
             document.getElementById('servings').textContent = `Servings: ${recipe.servings || "N/A"}`;
-    
-            const ingredientsArray = recipe.ingredients ? recipe.ingredients.split(',') : [];
+            
+            const ingredientsArray = Array.isArray(recipe.ingredients) ? recipe.ingredients : (recipe.ingredients || "").split(',');
             const methodArray = recipe.instructions ? recipe.instructions.split('.') : []; 
-        
+            
             const ingredientsList = document.getElementById('ingredients-list');
             ingredientsList.innerHTML = ingredientsArray.map(ingredient => `<li>${ingredient.trim()}</li>`).join('');
-        
+            
             const methodList = document.getElementById('method-list');
             methodList.innerHTML = methodArray.map(step => `<li>${step.trim()}</li>`).filter(step => step).join('');
+        }
+        async function handleLike() {
+            const recipeId = new URLSearchParams(window.location.search).get("id");
+            const userId = "user-id";
+    
+            try {
+                const response = await fetch(`http://localhost:3000/api/recipes/${recipeId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId })
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Recipe liked:', data.message);
+                    alert('Recipe liked successfully!');
+                } else {
+                    throw new Error('Failed to like recipe');
+                }
+            } catch (error) {
+                console.error('Error liking recipe:', error);
+            }
+        }
+    
+        async function handleSave() {
+            const recipeId = new URLSearchParams(window.location.search).get("id");
+            const userId = new URLSearchParams(window.location.search).get("id"); 
+    
+            try {
+                const response = await fetch(`http://localhost:3000/api/recipes/${recipeId}/save`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId })
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Recipe saved:', data.message);
+                    alert('Recipe saved successfully!');
+                } else {
+                    throw new Error('Failed to save recipe');
+                }
+            } catch (error) {
+                console.error('Error saving recipe:', error);
+            }
         }
         
 

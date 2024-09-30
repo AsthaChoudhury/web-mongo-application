@@ -56,7 +56,7 @@
               document.querySelector('#logout')?.addEventListener('click', (event) => {
                   event.preventDefault();
                   fetch('/api/user/logout', {
-                      method: 'GET',
+                      method: 'POST',
                       credentials: 'include'
                   })
                   .then(response => response.json())

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    
+    <title>Profile</title>
+</head>
+<body>
+    <header id="header-container"></header>
+
+    <main class="main">
+        
+
+    </main>
+</body>
+<script type="module">
+    import { loadHeader } from './assets/js/loadHeader.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      loadHeader();
+
+      try {
+        const response = await fetch("/api/user/status", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        
+        if (data.loggedIn) {
+          document.querySelector('.main').innerHTML = `
+            <h2>Welcome, ${data.user.name}</h2>
+            <p>Email: ${data.user.email}</p>
+            <h3>Liked Recipes:</h3>
+            <ul id="liked-recipes"></ul>
+            <h3>Saved Recipes:</h3>
+            <ul id="saved-recipes"></ul>
+          `;
+
+          const likedRecipesResponse = await fetch(`/api/user/liked-recipes?userId=${data.user._id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const likedRecipes = await likedRecipesResponse.json();
+          if (likedRecipes.length > 0) {
+            const likedRecipesList = document.getElementById("liked-recipes");
+            likedRecipes.forEach((recipe) => {
+              const li = document.createElement("li");
+              li.textContent = recipe.title; 
+              likedRecipesList.appendChild(li);
+            });
+          } else {
+            document.getElementById("liked-recipes").textContent = "No liked recipes.";
+          }
+          const savedRecipesResponse = await fetch("/api/user/saved-recipes", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const savedRecipes = await savedRecipesResponse.json();
+          const savedRecipesList = document.getElementById("saved-recipes");
+          savedRecipes.forEach((recipe) => {
+            const li = document.createElement("li");
+            li.textContent = recipe.title;
+            savedRecipesList.appendChild(li);
+          });
+        } else {
+          document.querySelector('.main').innerHTML = `
+            <h2>Please log in to view your profile.</h2>
+          `;
+        }
+      } catch (error) {
+        console.error("Failed to load profile data:", error);
+      }
+    });
+</script>
+
+</html>

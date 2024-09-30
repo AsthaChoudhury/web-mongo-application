@@ -2,12 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import path from "path";
+import { protect } from "./middleware/authMiddleware.js";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import bodyParser from "body-parser";
 import MongoStore from "connect-mongo";
-import Recipe from "./model/Recipe.js";
+import Recipe from "./model/recipes.js";
 import User from "./model/user.js";
 import userRouter from "./routes/user_routes.js";
 import recipesRouter from "./routes/recipe-routes.js";
@@ -37,7 +38,8 @@ app.use(
     store: store,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      secure: false, // 1 day
+      secure: false,
+      httpOnly: false,
     },
   })
 );
@@ -64,25 +66,65 @@ app.get("/api/recipes/:id", async (req, res) => {
   }
 });
 
-app.post("/api/user/like-recipe", async (req, res) => {
-  const { userId, recipeId } = req.body;
+app.post("/api/user/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+
+  if (user && user.comparePassword(password)) {
+    req.session.user = {
+      id: user._id,
+      username: user.username,
+    };
+    return res.status(200).json({ message: "Login successful" });
+  }
+  res.status(401).json({ message: "Invalid credentials" });
+});
+
+app.post("/api/recipes/:id/like", protect, async (req, res) => {
+  const recipeId = req.params.id;
+  console.log(
+    "Received like request from user ID:",
+    req.session.userId || req.user?.id
+  );
+  const userId = req.session.userId || req.user?.id;
+
+  if (!recipeId) {
+    return res.status(400).json({ message: "Recipe ID is required" });
+  }
 
   try {
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    if (!user.likedRecipes.includes(recipeId)) {
-      user.likedRecipes.push(recipeId);
-      await user.save();
+    const recipe = await Recipe.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
     }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.likedRecipes.includes(recipeId)) {
+      return res.status(400).json({ message: "Recipe is already liked" });
+    }
+
+    user.likedRecipes.push(recipeId);
+    await user.save();
 
     res.status(200).json({ message: "Recipe liked successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error liking recipe", error });
+    console.error("Error liking recipe:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to like recipe", error: error.message });
   }
 });
 
-// Save a Recipe
+app.post("/api/recipes/:id/save", (req, res) => {
+  const recipeId = req.params.id;
+  const userId = req.body.userId;
+
+  res.json({ success: true, message: "Recipe saved successfully" });
+});
 app.post("/user/save-recipe", async (req, res) => {
   const { userId, recipeId } = req.body;
   try {
@@ -102,20 +144,46 @@ app.post("/user/save-recipe", async (req, res) => {
   }
 });
 
-app.get("/api/user/liked-recipes", async (req, res) => {
-  const { userId } = req.query;
+app.get("/api/user/likedCategories", async (req, res) => {
+  const userId = req.query.userId;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
 
   try {
     const user = await User.findById(userId).populate("likedRecipes");
-    res.status(200).json({ likedRecipes: user.likedRecipes });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user.likedRecipes);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching liked recipes", error });
+    res.status(500).json({ message: "Failed to fetch liked recipes", error });
   }
 });
 
-// Get Saved Recipes
+app.get("/api/user/liked-recipes", async (req, res) => {
+  const userId = req.session.userId || req.user?.id;
+  if (!userId) {
+    return res.status(401).json({ message: "User not found" });
+  }
+
+  try {
+    const likedRecipes = await Recipe.find({ likedBy: userId });
+    res.json(likedRecipes);
+  } catch (error) {
+    console.error("Error fetching liked recipes:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 app.get("/api/user/saved-recipes", async (req, res) => {
-  const { userId } = req.query;
+  console.log("Session Data:", req.session);
+  const userId = req.session.user?.id;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
 
   try {
     const user = await User.findById(userId).populate("savedRecipes");
@@ -123,6 +191,34 @@ app.get("/api/user/saved-recipes", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error fetching saved recipes", error });
   }
+});
+
+app.post("/likeRecipe/:id", protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const recipeId = req.params.id;
+
+    if (user.likedRecipes.includes(recipeId)) {
+      user.likedRecipes.pull(recipeId);
+    } else {
+      user.likedRecipes.push(recipeId);
+    }
+
+    await user.save();
+    res.status(200).json({ message: "Recipe like status updated." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/api/user/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Failed to log out" });
+    }
+    res.status(200).json({ message: "Logged out successfully" });
+  });
 });
 
 const PORT = process.env.PORT || 5000;
@@ -138,7 +234,7 @@ const connectWithRetry = () => {
     })
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => {
-      console.error("MongoDB connection failed. Retrying in 5 seconds...");
+      console.error("MongoDB connection failed. Retrying in 5 seconds...", err);
       setTimeout(connectWithRetry, 5000);
     });
 };

@@ -1,14 +1,18 @@
 import express from "express";
-import Recipe from "../model/Recipe.js";
+import Recipe from "../model/recipes.js";
 import multer from "multer";
 import path from "path";
+import fs from "fs"; // Ensure fs is imported for file operations
 import { isAuthenticated } from "../middleware/auth.js";
 import {
   addRecipe,
   deleteRecipe,
   getAllRecipes,
 } from "../controllers/recipe_controller.js";
+
 const router = express.Router();
+
+// Multer configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -18,6 +22,7 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
+
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
@@ -29,6 +34,8 @@ const upload = multer({
     cb(null, true);
   },
 });
+
+// Route to upload a new recipe
 router.post(
   "/upload-recipe",
   isAuthenticated,
@@ -89,28 +96,13 @@ router.post(
     }
   }
 );
+
+// Route to get recipes by category
 router.get("/category/:category", async (req, res) => {
   const category = req.params.category;
 
   try {
-    // Replace with your actual data fetching logic
-    const recipes = await fetchRecipesByCategory(category); // This should be a function that queries your database
-
-    if (!recipes) {
-      return res.status(404).json({ error: "No recipes found" });
-    }
-
-    res.json(recipes);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch recipes" });
-  }
-});
-router.get("/", getAllRecipes);
-router.delete("/:id", isAuthenticated, deleteRecipe);
-router.get("/category/:category", async (req, res) => {
-  try {
-    const recipes = await Recipe.find({ category: req.params.category });
+    const recipes = await Recipe.find({ category: category });
     if (!recipes || recipes.length === 0) {
       return res
         .status(404)
@@ -122,6 +114,30 @@ router.get("/category/:category", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch recipes" });
   }
 });
+
+// Route to get all recipes
+router.get("/", getAllRecipes);
+
+// Route to delete a recipe
+router.delete("/:id", isAuthenticated, async (req, res) => {
+  try {
+    const recipe = await Recipe.findByIdAndDelete(req.params.id);
+
+    // Optionally delete the image file from the server
+    if (recipe && recipe.image) {
+      fs.unlink(path.join("uploads", recipe.image), (err) => {
+        if (err) console.error("Error deleting image file:", err);
+      });
+    }
+
+    res.status(200).json({ message: "Recipe deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting recipe" });
+  }
+});
+
+// Route to update a recipe
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const {
@@ -134,7 +150,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       instructions,
       category,
     } = req.body;
-    const image = req.file ? req.file.filename : "";
+    const image = req.file ? req.file.filename : null;
 
     const updatedRecipe = await Recipe.findByIdAndUpdate(
       req.params.id,
@@ -158,32 +174,8 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     res.status(500).json({ message: "Error updating recipe" });
   }
 });
-router.delete("/:id", async (req, res) => {
-  try {
-    const recipe = await Recipe.findByIdAndDelete(req.params.id);
 
-    // Optionally delete the image file from the server
-    if (recipe && recipe.image) {
-      fs.unlink(path.join("uploads", recipe.image), (err) => {
-        if (err) console.error("Error deleting image file:", err);
-      });
-    }
-
-    res.status(200).json({ message: "Recipe deleted" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error deleting recipe" });
-  }
-});
-
-router.delete("/recipes/:id", isAuthenticated, (req, res) => {
-  try {
-    deleteRecipe(req, res);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Error deleting recipe" });
-  }
-});
+// Routes for liking and saving recipes
 router.post("/api/recipe/like", (req, res) => {
   const { recipeId } = req.body;
   const userId = req.session.userId;
@@ -199,6 +191,7 @@ router.post("/api/recipe/like", (req, res) => {
     })
     .catch((err) => res.status(500).json({ error: "Failed to like recipe" }));
 });
+
 router.post("/api/recipe/save", (req, res) => {
   const { recipeId } = req.body;
   const userId = req.session.userId;
@@ -215,6 +208,8 @@ router.post("/api/recipe/save", (req, res) => {
     })
     .catch((err) => res.status(500).json({ error: "Failed to save recipe" }));
 });
+
+// Route to fetch liked recipes
 router.get("/api/user/liked-recipes", isAuthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId).populate(
@@ -226,6 +221,8 @@ router.get("/api/user/liked-recipes", isAuthenticated, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch liked recipes" });
   }
 });
+
+// Route to fetch saved recipes
 router.get("/api/user/saved-recipes", isAuthenticated, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId).populate(

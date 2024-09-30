@@ -1,4 +1,4 @@
-import Recipe from "../model/Recipe.js";
+import Recipe from "../model/recipes.js";
 import fs from "fs";
 import path from "path";
 

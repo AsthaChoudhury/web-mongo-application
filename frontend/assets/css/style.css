@@ -706,5 +706,74 @@ button,textarea,input{
       }
 }
 
+@media (max-width: 1200px) {
+    .nav__menu {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .home .row .image-container {
+        width: 45%; 
+    }
+}
+
+@media (max-width: 992px) {
+    .home .row .image-container {
+        width: 80%;
+    }
+
+    .trending__items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .categories__container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category__circle {
+        width: 80%;
+    }
+
+    .logo-text h3 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav__link {
+        font-size: var(--small-font-size);
+    }
+
+    .logo-text h3 {
+        font-size: 1.5rem;
+    }
+
+    .trending__items {
+        grid-template-columns: 1fr; 
+    }
+
+    .recipe-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .auth-container input, .upload input {
+        width: 90%;
+    }
+}
+
+@media (max-width: 576px) {
+    .header__login-btn, .header__register-btn {
+        font-size: var(--smaller-font-size);
+        padding: 0.25rem 0.5rem;
+    }
+
+    .category__circle {
+        width: 100%;
+        padding: 1rem 0;
+    }
+}
+
 
 
