@@ -25,7 +25,7 @@ To run this project locally, follow these steps:
    cd web-mongo-application
 Install dependencies:
 
-    ```bash
+    
     npm install
 Set up environment variables: Create a .env file in the root of the project and add the necessary configurations (e.g., database URI, API keys).
 
@@ -36,7 +36,7 @@ The application will run on http://localhost:3000
 
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. 
 
 ## Acknowledgments
 Inspired by various recipe-sharing platforms.
