@@ -1,32 +1,41 @@
 {
-  "name": "webb",
+  "name": "web-mongo-application",
   "version": "1.0.0",
   "description": "baking website",
   "main": "app.mjs",
   "scripts": {
-    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node app.js",
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node app.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AsthaChoudhury/web_application_using_mongodb.git"
+    "url": "git+https://github.com/AsthaChoudhury/web-mongo-application.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AsthaChoudhury/web_application_using_mongodb/issues"
+    "url": "https://github.com/AsthaChoudhury/web-mongo-application/issues"
   },
-  "homepage": "https://github.com/AsthaChoudhury/web_application_using_mongodb#readme",
+  "homepage": "https://github.com/AsthaChoudhury/web-mongo-application#readme",
   "dependencies": {
-    "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.18.2",
+    "express-session": "^1.18.0",
     "js": "^0.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.2",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.0.1"
+    "nodemailer": "^6.9.15",
+    "nodemon": "^3.0.1",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.26.2"
   },
   "type": "module"
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification</title>
+</head>
+<body>
+  <h1>Email Verification</h1>
+  <p id="message">Verifying your email...</p>
+
+  <script>
+    async function verifyEmail(token) {
+      try {
+        const response = await fetch(`/api/user/verify?token=${token}`, {
+          method: 'GET',
+        });
+
+        const result = await response.json();
+        const messageElement = document.getElementById('message');
+        if (response.ok) {
+          messageElement.innerText = 'Your email has been verified. You can now log in.';
+        } else {
+          messageElement.innerText = result.message;
+        }
+      } catch (error) {
+        console.error('Error verifying email:', error);
+        document.getElementById('message').innerText = 'Verification failed.';
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      verifyEmail(token);
+    } else {
+      document.getElementById('message').innerText = 'Invalid verification link.';
+    }
+  </script>
+</body>
+</html>

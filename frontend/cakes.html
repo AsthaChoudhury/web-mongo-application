@@ -68,4 +68,31 @@
 
     </main>
 </body>
+<script>
+    document.getElementById('category-select').addEventListener('change', function() {
+      const category = this.value;
+  
+      fetch(`/api/recipes?category=${category}`)
+        .then(response => response.json())
+        .then(data => {
+          const recipeList = document.getElementById('recipe-list');
+          recipeList.innerHTML = '';
+  
+          data.forEach(recipe => {
+            const recipeItem = document.createElement('a');
+            recipeItem.href = `${recipe.title.toLowerCase().replace(/\s+/g, '-')}.html`; 
+            recipeItem.className = "cake_circle swiper__slide";
+  
+            recipeItem.innerHTML = `
+              <img src="${recipe.image || 'assets/img/default.jpg'}" alt="" class="cake__icon">
+              <h3 class="cake__title">${recipe.title.toUpperCase()}</h3>
+            `;
+  
+            recipeList.appendChild(recipeItem);
+          });
+        })
+        .catch(error => console.error('Error fetching recipes:', error));
+    });
+  </script>
+  
 </html>

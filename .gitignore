@@ -1,0 +1,5 @@
+uploads/
+node_modules/
+.env
+cookies.txt
+package-lock.json

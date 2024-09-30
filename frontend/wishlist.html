@@ -3,73 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <link rel="stylesheet" href="assets/css/style.css"/>
-    <script src="assets/js/main.js"></script>
     <title>Liked Recipes</title>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav container">
-            <a href="index.html" class="nav__logo">
-                <img src="assets/img/logo.jpg" alt="" class="nav__logo-img" />
-            </a>
-            <div class="nav__menu" id="nav__menu">
-                <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="index.html" class="nav__link active link">Home</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="recipe.html" class="nav__link">Recipe</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="conversion.html" class="nav__link">Conversion</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="upload.html" class="nav__link">Upload</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="about.html" class="nav__link">About us</a>
-                    </li>
-                </ul>
-
-                
-            </div>
-
-            <div class="header__user-actions">
-                <a href="wishlist.html" class="header__action-btn">
-                    <img src="assets/img/heart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <a href="cart.html" class="header__action-btn">
-                    <img src="assets/img/cart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <div class="header__auth-buttons">
-                    <a href="login.html" class="header__login-btn">Login</a>
-                    <a href="register.html" class="header__register-btn">Register</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main class="main">
-        <section class="liked-recipes">
-            <div class="container">
-                
-            <h1 class="heading">Liked Recipes</h1>
-                <div class="recipe-card">
-                </div>
-            </div>
-        </section>
-    </main>
-
-  </body>
-  </html>
-
- 
+  <header id="header-container"></header>
+  <main class="main">
+    <div class="container">
+      <h2>Your Liked Recipes</h2>
+      <div id="liked-recipes-grid" class="recipe-grid"></div>
+      <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+  </main>
   
-  
+  <script type="module">
+    import { loadHeader } from './assets/js/loadHeader.js';
 
+    document.addEventListener("DOMContentLoaded", () => {
+      loadHeader();
+      loadLikedRecipes(); 
+    });
 
+    async function loadLikedRecipes() {
+      try {
+        const userId = sessionStorage.getItem('userId');
+        console.log('Session storage userId:', userId);
+        
+        if (!userId) {
+          displayErrorMessage('User not logged in.');
+          return;
+        }
+    
+        const response = await fetch(`/api/user/liked-recipes`, {
+          method: 'GET',
+          credentials: 'include'
+        });
 
+        if (!response.ok) {
+          throw new Error('Failed to fetch liked recipes: ' + response.statusText);
+        }
+    
+        const likedRecipes = await response.json();
+        const recipeGrid = document.getElementById('liked-recipes-grid');
+        recipeGrid.innerHTML = '';
+    
+        if (likedRecipes.length === 0) {
+          displayErrorMessage('No liked recipes found.');
+          return;
+        }
+    
+        likedRecipes.forEach(recipe => {
+          const recipeCard = document.createElement('a');
+          recipeCard.href = `recipelayout.html?id=${recipe._id}`;
+          recipeCard.className = "cake_circle swiper__slide";
+        
+          recipeCard.innerHTML = `
+            <img src="${recipe.image || 'assets/img/default.jpg'}" alt="${recipe.title}" class="cake__icon">
+            <h3 class="cake__title">${recipe.title.toUpperCase()}</h3>
+          `;
+          recipeGrid.appendChild(recipeCard);
+        });
+      } catch (error) {
+        console.error("Error loading liked recipes:", error);
+        displayErrorMessage('There was an error loading the liked recipes. Please try again later.');
+      }
+    }
+    
+    function displayErrorMessage(message) {
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

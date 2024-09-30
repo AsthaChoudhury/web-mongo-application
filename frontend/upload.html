@@ -2,88 +2,147 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="assets/css/style.css"/>
-    <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
-/>
-    <title>Upload recipes</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+    <title>Upload Recipes</title>
+
+    <style>
+      #editor {
+          height: 200px;
+          background-color: white;
+          margin-top: 10px;
+      }
+
+      .ql-container {
+          width: 100%; 
+      }
+
+      .ql-editor {
+          min-height: 150px; 
+      }
+
+      .input-group {
+          margin-bottom: 20px;
+      }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav container">
-            <a href="index.html" class="nav__logo">
-                <img src="assets/img/logo.jpg" alt="" class="nav__logo-img" />
-            </a>
-            <div class="nav__menu" id="nav__menu">
-                <ul class="nav__list">
-                    <li class="nav__item">
-                        <a href="index.html" class="nav__link active link">Home</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="recipe.html" class="nav__link">Recipe</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="conversion.html" class="nav__link">Conversion</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="upload.html" class="nav__link">Upload</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="about.html" class="nav__link">About us</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="header__user-actions">
-                <a href="wishlist.html" class="header__action-btn">
-                    <img src="assets/img/heart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <a href="cart.html" class="header__action-btn">
-                    <img src="assets/img/cart.png" alt="">
-                    <span class="count">3</span>
-                </a>
-                <div class="header__auth-buttons">
-                    <a href="login.html" class="header__login-btn">Login</a>
-                    <a href="register.html" class="header__register-btn">Register</a>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+    <header id="header-container"></header>
     <main class="main">
         <section class="upload">
             <h1 class="heading">Upload Your Recipe</h1>
-            <form id="recipeForm">
-                <div class="recipe-form"> <div class="input-group">
-                    <label for="recipeTitle">recipeTitle</label>
-                    <input type="text" id="title" name="title" required >
+            <form id="recipeForm" enctype="multipart/form-data" method="POST">
+                <div class="recipeForm" > 
+                    <div class="input-group">
+                        <label for="title">Recipe Title</label>
+                        <input type="text" id="title" name="title" required >
                     </div>
-                <div class="input-group">
-                    <label for="ingredients">Ingredients: </label>
-                    <textarea id="ingredients" name="ingredients" required></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="instructions">Instructions</label>
-                    <textarea id="instructions" name="instructions" required></textarea>
-                </div>
-                <div class="input-group">
-                    <label for="category">Category</label>
-                    <select id="category" name="category" required>
-                        <option value="drinks">Drinks</option>
-                        <option value="cakes">Cakes</option>
-                        <option value="cookies">Cookies</option>
-                        <option value="savoury">Savoury</option>
-                        <option value="bread">Bread</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <input type="file" id="image" name="image" accept="image/*" required />
-                </div></div>
+                    <div class="input-group">
+                      <label for="description">Description</label>
+                      <div id="description"></div>
+                  </div>
+                    <div class="input-group">
+                        <label for="prepTime">Prep Time</label>
+                        <input type="text" id="prepTime" name="prepTime" required >
+                    </div>
+                    <div class="input-group">
+                        <label for="cookTime">Cook Time</label>
+                        <input type="text" id="cookTime" name="cookTime" required >
+                    </div>
+                    <div class="input-group">
+                        <label for="servings">Servings</label>
+                        <input type="text" id="servings" name="servings" required >
+                    </div>
+                    
+                    <div class="input-group">
+                      <label for="ingredients">Ingredients</label>
+                      <div id="ingredients"></div>
+                  </div>
+
+                    <div class="input-group">
+                        <label for="instructions">Instructions</label>
+                        <div id="instructions"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="drinks">Drinks</option>
+                            <option value="cakes">Cakes</option>
+                            <option value="cookies">Cookies</option>
+                            <option value="savoury">Savoury</option>
+                            <option value="bread">Bread</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="image">Upload Image:</label>
+                        <input type="file" name="image" id="image" accept="image/*" />
+                    </div>
+
                     <button type="submit">Upload Recipe</button>
-          
+                </div>
             </form> 
         </section>
-    </main>
+      </main>
+
+      <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  
+      <script type="module">
+          import { loadHeader } from './assets/js/loadHeader.js';
+          document.addEventListener("DOMContentLoaded", () => {
+              loadHeader();
+          });
+      </script>
+  
+      <script>
+          var quill = new Quill('#instructions', {
+              theme: 'snow',
+              modules: {
+                  toolbar: true
+              }
+          });
+
+          var quillDescription = new Quill('#description', {
+            theme: 'snow',
+            modules: {
+                toolbar: true
+            }
+        });
+
+        var quillIngredients = new Quill('#ingredients', {
+          theme: 'snow',
+          modules: {
+              toolbar: true
+          }
+      });
+  
+      document.getElementById('recipeForm').onsubmit = function(event) {
+        event.preventDefault();  
+    
+        var instructions = quill.root.innerHTML;
+        var description = quillDescription.root.innerHTML;
+        var ingredients = quillIngredients.root.innerHTML;
+    
+        var formData = new FormData(document.getElementById('recipeForm'));
+        formData.append('instructions', instructions);
+        formData.append('description', description);
+        formData.append('ingredients', ingredients);
+    
+        fetch('/api/upload-recipe', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          // Handle success (e.g., redirect or show a success message)
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Handle error
+        });
+      };
+    </script>
 </body>
 </html>
