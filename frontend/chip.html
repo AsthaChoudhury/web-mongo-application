@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -234,3 +235,241 @@
     </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <title>Recipe Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            background-color: white;
+        }
+
+        .logo-text {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        ul, ol {
+            margin: 0;
+            padding: 0;
+        }
+        h3, h5, p {
+            margin: 0 0 10px 0; 
+            padding: 0;
+        }
+        ul li, ol li {
+            font-size: 0.8rem; 
+            margin: 5px 0;
+        }
+
+
+        li {
+            font-size: 0.8rem; 
+        }
+
+        .eggless {
+            color: #333;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: hsl(154,13%,32%);
+        }
+
+        h5 {
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .recipe-info {
+            display: flex;
+            gap: 10px; 
+            margin-bottom: 8px; 
+        }
+        
+        .recipe-info p {
+            background-color: hsl(176,88%, 27%);
+            font-size: 0.8rem;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100px;
+            text-align: center;
+            justify-content: center;
+        }
+        
+
+        .recipe-action {
+            margin-top: 1px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+
+        .like-button, .save-button, .comment-button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: white;
+            background-color: #007BFF;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .like-button:hover, .save-button:hover, .comment-button:hover {
+            background-color: #0056b3;
+        }
+
+        .like-button:active, .save-button:active, .comment-button:active {
+            transform: scale(0.98);
+        }
+
+        .like-button {
+            background-color: #28a745;
+        }
+
+        .save-button {
+            background-color: #ffc107;
+        }
+
+        .comment-button {
+            background-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .recipe-action {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <main>
+        <div class="logo-text">
+            <section class="eggless">
+                <h3>Chocochip Cookies</h3>
+                <div class="recipe-info">
+                    <p>Prep Time: 15 mins</p>
+                    <p>Cook Time: 10 mins</p>
+                    <p>Servings: 24 cookies</p>
+                </div>
+                <h5>Ingredients</h5>
+                <ul>
+                    <li>1 cup butter, softened</li>
+                    <li>1 cup white sugar</li>
+                    <li>1 cup packed brown sugar</li>
+                    <li>2 eggs</li>
+                    <li>2 teaspoons vanilla extract</li>
+                    <li>1 teaspoon baking soda</li>
+                    <li>2 teaspoons hot water</li>
+                    <li>3 cups all-purpose flour</li>
+                    <li>2 cups semisweet chocolate chips</li>
+                    <li>1 cup chopped walnuts</li>
+                </ul>
+                <h5>Method</h5>
+                <ol>
+                    <li>Gather your ingredients, making sure your butter is softened, and your eggs are room temperature.</li>
+                    <li>Preheat the oven to 350 degrees F (175 degrees C).</li>
+                    <li>Beat butter, white sugar, and brown sugar with an electric mixer in a large bowl until smooth.</li>
+                    <li>Beat in eggs, one at a time, then stir in vanilla.</li>
+                    <li>Dissolve baking soda in hot water. Add to batter along with salt.</li>
+                    <li>Stir in flour, chocolate chips, and walnuts.</li>
+                    <li>Drop spoonfuls of dough 2 inches apart onto ungreased baking sheets.</li>
+                    <li>Bake in the preheated oven until edges are nicely browned, about 10 minutes.</li>
+                    <li>Cool on the baking sheets briefly before removing to a wire rack to cool completely.</li>
+                    <li>Store in an airtight container or serve immediately and enjoy!</li>
+                </ol>
+            </section>
+            <div class="recipe-action">
+                <button class="like-button" data-recipe-id="${recipe.id}">Like</button>
+                <button class="save-button" data-recipe-id="${recipe.id}">Save</button>
+                <button class="comment-button">Comment</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { loadHeader } from './assets/js/loadHeader.js';
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeader();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            // Like button functionality
+            document.querySelectorAll('.like-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const recipeId = event.target.getAttribute('data-recipe-id');
+                    
+                    fetch('/api/recipe/like', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ recipeId }),
+                        credentials: 'include'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error liking recipe:', error));
+                });
+            });
+        
+            // Save button functionality
+            document.querySelectorAll('.save-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const recipeId = event.target.getAttribute('data-recipe-id');
+                    
+                    fetch('/api/recipe/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ recipeId }),
+                        credentials: 'include'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error saving recipe:', error));
+                });
+            });
+        });
+        
+    </script>
+</body>
+</html>
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8

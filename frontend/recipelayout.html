@@ -43,6 +43,7 @@
             font-size: 0.8rem; 
         }
 
+<<<<<<< HEAD
         .comment-section {
             display: none;
             margin-top: 20px;
@@ -93,6 +94,8 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+=======
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
         .eggless {
             color: #333;
         }
@@ -199,6 +202,7 @@
                 <button class="save-button">Save</button>
                 <button class="comment-button">Comment</button>
             </div>
+<<<<<<< HEAD
             
             <div class="comment-section">
                 <h5>Comments</h5>
@@ -211,6 +215,8 @@
                 </form>
             </div>
             
+=======
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
         </div>
     </main>
 
@@ -223,6 +229,7 @@
 
             document.querySelector('.like-button').addEventListener('click', handleLike);
         document.querySelector('.save-button').addEventListener('click', handleSave);
+<<<<<<< HEAD
         document.querySelector('.comment-button').addEventListener('click', handleCommentButton);
         const commentForm = document.getElementById("comment-form");
     commentForm.addEventListener("submit", handleCommentSubmit);
@@ -281,6 +288,10 @@
           }
           
 
+=======
+        });
+
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
         async function loadRecipe() {
             const params = new URLSearchParams(window.location.search);
             const recipeId = params.get("id");
@@ -298,13 +309,17 @@
                 }
                 const recipeData = await response.json();
                 displayRecipe(recipeData);
+<<<<<<< HEAD
                 displayComments(recipeData.comments); 
+=======
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
             } catch (error) {
                 console.error('Error fetching recipe data:', error);
                 displayErrorMessage("Error fetching recipe");
             }
         }
 
+<<<<<<< HEAD
         function displayComments(comments) {
             const commentList = document.getElementById('comment-list');
             commentList.innerHTML = '';
@@ -315,6 +330,8 @@
             });
         }
 
+=======
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
         function displayRecipe(recipe) {
             document.getElementById('recipe-title').textContent = recipe.title || "No title available";
             document.getElementById('prep-time').textContent = `Prep Time: ${recipe.prepTime || "N/A"}`;

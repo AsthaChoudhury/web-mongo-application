@@ -10,7 +10,15 @@
     <main class="main">
         <section class="recipe" id="recipe-section">
         </section>
+<<<<<<< HEAD
         <div id="error-message" class="error-message"></div>
+=======
+<<<<<<< HEAD
+        <div id="error-message" class="error-message"></div>
+=======
+        <div id="error-message" class="error-message"></div> 
+>>>>>>> 85d7e769750096215835d7c763c91c661d7cf159
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
     </main>
 
     <script type="module">
@@ -38,8 +46,18 @@
         
                 const recipes = await response.json();
                 const recipeSection = document.getElementById('recipe-section');
+<<<<<<< HEAD
                 recipeSection.innerHTML = '';
         
+=======
+<<<<<<< HEAD
+                recipeSection.innerHTML = '';
+        
+=======
+                recipeSection.innerHTML = ''; 
+          
+>>>>>>> 85d7e769750096215835d7c763c91c661d7cf159
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
                 if (recipes.length === 0) {
                     displayErrorMessage('No recipes found for this category.');
                     return;
@@ -48,8 +66,18 @@
                 recipes.forEach(recipe => {
                     const recipeCard = document.createElement('a');
                     recipeCard.href = `recipelayout.html?id=${recipe._id}`;
+<<<<<<< HEAD
                     recipeCard.className = "cake_circle swiper__slide";
         
+=======
+<<<<<<< HEAD
+                    recipeCard.className = "cake_circle swiper__slide";
+        
+=======
+                    recipeCard.className = "cake_circle swiper__slide"; 
+          
+>>>>>>> 85d7e769750096215835d7c763c91c661d7cf159
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
                     recipeCard.innerHTML = `
                         <img src="${recipe.image || 'assets/img/default.jpg'}" alt="${recipe.title}" class="cake__icon">
                         <h3 class="cake__title">${recipe.title.toUpperCase()}</h3>

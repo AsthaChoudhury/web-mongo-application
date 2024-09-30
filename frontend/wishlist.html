@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,3 +78,84 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <title>Liked Recipes</title>
+</head>
+<body>
+  <header id="header-container"></header>
+  <main class="main">
+    <div class="container">
+      <h2>Your Liked Recipes</h2>
+      <div id="liked-recipes-grid" class="recipe-grid"></div>
+      <div id="error-message" class="error-message" style="display: none;"></div>
+    </div>
+  </main>
+  
+  <script type="module">
+    import { loadHeader } from './assets/js/loadHeader.js';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadHeader();
+      loadLikedRecipes(); 
+    });
+
+    async function loadLikedRecipes() {
+      try {
+        const userId = sessionStorage.getItem('userId');
+        console.log('Session storage userId:', userId);
+        
+        if (!userId) {
+          displayErrorMessage('User not logged in.');
+          return;
+        }
+    
+        const response = await fetch(`/api/user/liked-recipes`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch liked recipes: ' + response.statusText);
+        }
+    
+        const likedRecipes = await response.json();
+        const recipeGrid = document.getElementById('liked-recipes-grid');
+        recipeGrid.innerHTML = '';
+    
+        if (likedRecipes.length === 0) {
+          displayErrorMessage('No liked recipes found.');
+          return;
+        }
+    
+        likedRecipes.forEach(recipe => {
+          const recipeCard = document.createElement('a');
+          recipeCard.href = `recipelayout.html?id=${recipe._id}`;
+          recipeCard.className = "cake_circle swiper__slide";
+        
+          recipeCard.innerHTML = `
+            <img src="${recipe.image || 'assets/img/default.jpg'}" alt="${recipe.title}" class="cake__icon">
+            <h3 class="cake__title">${recipe.title.toUpperCase()}</h3>
+          `;
+          recipeGrid.appendChild(recipeCard);
+        });
+      } catch (error) {
+        console.error("Error loading liked recipes:", error);
+        displayErrorMessage('There was an error loading the liked recipes. Please try again later.');
+      }
+    }
+    
+    function displayErrorMessage(message) {
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8

@@ -72,6 +72,7 @@ export const deleteRecipe = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 export const addComment = async (req, res) => {
   const { id } = req.params;
   const { text } = req.body;
@@ -94,6 +95,8 @@ export const addComment = async (req, res) => {
   }
 };
 
+=======
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
 //     let existingUser;
 //     try{
 //         existingUser=await User.findById(user);

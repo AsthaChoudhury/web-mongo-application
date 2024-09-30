@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,3 +45,51 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css"/>
+    <script src="assets/js/main.js"></script>
+    <title>Saved Recipes</title>
+</head>
+<body>
+  <header id="header-container"></header>
+  <main class="main">
+    <div class="container">
+      <h2>Your Saved Recipes</h2>
+      <div class="recipe-grid"></div>
+    </div>
+  </main>
+  
+  <script type="module">
+    import { loadHeader } from './assets/js/loadHeader.js';
+    document.addEventListener("DOMContentLoaded", () => {
+      loadHeader();
+      displaySavedRecipes();
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/api/user/saved-recipes', { method: 'GET', credentials: 'include' })
+      .then(response => response.json())
+      .then(data => {
+          const recipeGrid = document.querySelector('.recipe-grid');
+          data.savedRecipes.forEach(recipe => {
+              const recipeCard = document.createElement('div');
+              recipeCard.classList.add('recipe-card');
+              recipeCard.innerHTML = `
+                  <a href="/recipe/${recipe.id}">
+                      <img src="${recipe.imageUrl}" alt="${recipe.title}">
+                      <h3>${recipe.title}</h3>
+                  </a>
+              `;
+              recipeGrid.appendChild(recipeCard);
+          });
+      })
+      .catch(error => console.error('Error fetching saved recipes:', error));
+    });
+  </script>
+</body>
+</html>
+>>>>>>> c6b98d4c0b13ecdee898f5846ee45548982160a8
