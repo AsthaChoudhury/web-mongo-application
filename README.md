@@ -35,8 +35,5 @@ Set up environment variables: Create a .env file in the root of the project and 
 The application will run on http://localhost:3000
 
 
-## License
-This project is licensed under the MIT License. 
-
 ## Acknowledgments
 Inspired by various recipe-sharing platforms.
